@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Resumen del Nuevo Testamento</title>
+<style>
+  :root{
+    --bg1: #e7e4d0;
+    --bg2: #f5f2e6;
+    --panel: #fffdf5;
+    --accent: #b89232;
+    --text-dark: #4a3e1c;
+  }
+
+  body{
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: linear-gradient(135deg, var(--bg1), var(--bg2));
+    margin: 0;
+    padding: 0;
+    color: var(--text-dark);
+  }
+
+  header{
+    text-align:center;
+    padding: 20px 10px;
+  }
+
+  h1{
+    margin: 0;
+    font-size: 28px;
+    color: #5a4a1f;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.08);
+  }
+
+  p.subheader{
+    margin-top:6px;
+    color:#6b5a26;
+    font-size: 16px;
+  }
+
+  .container{
+    max-width: 900px;
+    margin: 20px auto;
+    background: var(--panel);
+    padding: 20px;
+    border-radius: 12px;
+    border: 2px solid #e8e0c3;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+  }
+
+  label{
+    font-weight:700;
+    color:#5a4a1f;
+    display:block;
+    margin-bottom:8px;
+  }
+
+  select.book-select{
+    width: 100%;
+    padding: 12px;
+    border-radius:8px;
+    border:1px solid #e0d7b8;
+    background: white;
+    font-weight:600;
+    color:var(--text-dark);
+    font-size:16px;
+    margin-bottom:20px;
+    box-sizing: border-box;
+  }
+
+  .book-summary{
+    background:#f3e4d7;
+    padding:20px;
+    border-radius:10px;
+    border:1px solid #c7b9a7;
+    font-weight:500;
+    color:#4b3728;
+    line-height:1.6;
+    font-size:16px;
+  }
+
+  /* Responsive */
+  @media (max-width: 600px){
+    .container{
+      margin: 15px;
+      padding: 15px;
+    }
+
+    h1{
+      font-size: 24px;
+    }
+
+    p.subheader{
+      font-size:14px;
+    }
+
+    select.book-select{
+      font-size:14px;
+      padding:10px;
+    }
+
+    .book-summary{
+      font-size:14px;
+      padding:15px;
+    }
+  }
+
+  @media (max-width: 400px){
+    h1{
+      font-size: 20px;
+    }
+    select.book-select{
+      font-size:13px;
+      padding:8px;
+    }
+    .book-summary{
+      font-size:13px;
+      padding:12px;
+    }
+  }
+
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Nuevo Testamento</h1>
+  <p class="subheader">Selecciona un libro del Nuevo Testamento para ver un resumen de su contenido</p>
+</header>
+
+<div class="container">
+  <label for="book">Libro</label>
+  <select id="book" class="book-select">
+  </select>
+
+  <div id="bookSummary" class="book-summary">
+    Selecciona un libro para ver su resumen
+  </div>
+</div>
+
+<script>
+// Libros y resúmenes del Nuevo Testamento
+const newTestamentBooks = {
+  "Mateo": "Mateo describe la vida, enseñanzas, muerte y resurrección de Jesús, destacando su papel como Mesías.",
+  "Marcos": "Marcos narra la vida y obra de Jesús, enfocándose en sus milagros y enseñanzas.",
+  "Lucas": "Lucas presenta la historia de Jesús y su mensaje de amor y salvación para toda la humanidad.",
+  "Juan": "Juan enfatiza la divinidad de Cristo, sus milagros y enseñanzas sobre la fe y la vida eterna.",
+  "Hechos": "Hechos de los Apóstoles describe la expansión de la iglesia primitiva y la acción del Espíritu Santo.",
+  "Romanos": "Romanos contiene las enseñanzas de Pablo sobre la fe, la salvación y la vida cristiana.",
+  "1 Corintios": "1 Corintios aborda problemas de la iglesia en Corinto y enseña sobre unidad y amor.",
+  "2 Corintios": "2 Corintios defiende el ministerio de Pablo y la reconciliación con Dios.",
+  "Gálatas": "Gálatas explica la libertad en Cristo y la justificación por la fe.",
+  "Efesios": "Efesios enseña sobre la unidad en Cristo y la vida cristiana en comunidad.",
+  "Filipenses": "Filipenses es una carta de gratitud y exhortación a la alegría en la fe.",
+  "Colosenses": "Colosenses destaca la supremacía de Cristo y la vida en santidad.",
+  "1 Tesalonicenses": "1 Tesalonicenses anima a la fe y esperanza ante la venida de Cristo.",
+  "2 Tesalonicenses": "2 Tesalonicenses corrige malentendidos sobre la segunda venida de Cristo.",
+  "1 Timoteo": "1 Timoteo da instrucciones para la organización de la iglesia y liderazgo pastoral.",
+  "2 Timoteo": "2 Timoteo anima a la perseverancia en la fe y la enseñanza de la verdad.",
+  "Tito": "Tito contiene consejos sobre la conducta de líderes y creyentes en la iglesia.",
+  "Filemón": "Filemón es una carta breve sobre perdón y reconciliación entre hermanos en Cristo.",
+  "Hebreos": "Hebreos explica la supremacía de Cristo y la plenitud de su sacrificio.",
+  "Santiago": "Santiago enseña sobre la fe activa, la paciencia y la sabiduría práctica.",
+  "1 Pedro": "1 Pedro alienta a los cristianos a mantenerse firmes en medio de las pruebas.",
+  "2 Pedro": "2 Pedro advierte contra falsos maestros y reafirma la verdad de la fe.",
+  "1 Juan": "1 Juan enfatiza el amor de Dios y la importancia de la comunión entre creyentes.",
+  "2 Juan": "2 Juan advierte sobre falsos maestros y llama a mantener la verdad.",
+  "3 Juan": "3 Juan anima a la hospitalidad y fidelidad entre los cristianos.",
+  "Judas": "Judas advierte sobre los falsos maestros y llama a defender la fe.",
+  "Apocalipsis": "Apocalipsis revela visiones proféticas sobre la victoria final de Dios y la esperanza futura."
+};
+
+const bookSelect = document.getElementById('book');
+const bookSummary = document.getElementById('bookSummary');
+
+function populateBooks(){
+  const names = Object.keys(newTestamentBooks);
+  bookSelect.innerHTML = names.map(n => `<option value="${n}">${n}</option>`).join('');
+  if(names.length) showSummary(names[0]);
+}
+
+function showSummary(bookName){
+  bookSummary.textContent = newTestamentBooks[bookName] || "Resumen no disponible";
+}
+
+bookSelect.addEventListener('change', e=>{
+  showSummary(e.target.value);
+});
+
+populateBooks();
+</script>
+</body>
+</html>

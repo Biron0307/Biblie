@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Resumen del Viejo Testamento</title>
+<style>
+  :root{
+    --bg1: #e7e4d0;
+    --bg2: #f5f2e6;
+    --panel: #fffdf5;
+    --accent: #b89232;
+    --text-dark: #4a3e1c;
+  }
+
+  body{
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: linear-gradient(135deg, var(--bg1), var(--bg2));
+    margin: 0;
+    padding: 0;
+    color: var(--text-dark);
+  }
+
+  header{
+    text-align:center;
+    padding: 20px 10px;
+  }
+
+  h1{
+    margin: 0;
+    font-size: 28px;
+    color: #5a4a1f;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.08);
+  }
+
+  p.subheader{
+    margin-top:6px;
+    color:#6b5a26;
+    font-size: 16px;
+  }
+
+  .container{
+    max-width: 900px;
+    margin: 20px auto;
+    background: var(--panel);
+    padding: 20px;
+    border-radius: 12px;
+    border: 2px solid #e8e0c3;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+  }
+
+  label{
+    font-weight:700;
+    color:#5a4a1f;
+    display:block;
+    margin-bottom:8px;
+  }
+
+  select.book-select{
+    width: 100%;
+    padding: 12px;
+    border-radius:8px;
+    border:1px solid #e0d7b8;
+    background: white;
+    font-weight:600;
+    color:var(--text-dark);
+    font-size:16px;
+    margin-bottom:20px;
+    box-sizing: border-box;
+  }
+
+  .book-summary{
+    background:#f3e4d7;
+    padding:20px;
+    border-radius:10px;
+    border:1px solid #c7b9a7;
+    font-weight:500;
+    color:#4b3728;
+    line-height:1.6;
+    font-size:16px;
+  }
+
+  /* Responsive */
+  @media (max-width: 600px){
+    .container{
+      margin: 15px;
+      padding: 15px;
+    }
+
+    h1{
+      font-size: 24px;
+    }
+
+    p.subheader{
+      font-size:14px;
+    }
+
+    select.book-select{
+      font-size:14px;
+      padding:10px;
+    }
+
+    .book-summary{
+      font-size:14px;
+      padding:15px;
+    }
+  }
+
+  @media (max-width: 400px){
+    h1{
+      font-size: 20px;
+    }
+    select.book-select{
+      font-size:13px;
+      padding:8px;
+    }
+    .book-summary{
+      font-size:13px;
+      padding:12px;
+    }
+  }
+
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Viejo Testamento</h1>
+  <p class="subheader">Selecciona un libro del Viejo Testamento para ver un resumen de su contenido</p>
+</header>
+
+<div class="container">
+  <label for="book">Libro</label>
+  <select id="book" class="book-select">
+  </select>
+
+  <div id="bookSummary" class="book-summary">
+    Selecciona un libro para ver su resumen
+  </div>
+</div>
+
+<script>
+// Libros y resúmenes del Viejo Testamento
+const oldTestamentBooks = {
+  "Génesis": "Génesis narra la creación del mundo, los primeros hombres, la historia de Noé y el inicio del pueblo de Israel.",
+  "Éxodo": "Éxodo relata la liberación de Israel de Egipto, la travesía por el desierto y la entrega de la Ley a Moisés.",
+  "Levítico": "Levítico contiene leyes y normas para el pueblo de Israel, incluyendo rituales y sacrificios.",
+  "Números": "Números describe el recorrido de Israel por el desierto y las pruebas de fe que enfrentaron.",
+  "Deuteronomio": "Deuteronomio recapitula las leyes dadas por Dios y exhorta al pueblo a la obediencia.",
+  "Josué": "Josué narra la conquista de Canaán y la distribución de la tierra prometida entre las tribus de Israel.",
+  "Jueces": "Jueces describe la historia de Israel entre la muerte de Josué y el establecimiento de la monarquía.",
+  "Rut": "Rut cuenta la historia de lealtad y fe de Rut, ancestro del rey David.",
+  "1 Samuel": "1 Samuel relata la transición de Israel de la época de jueces a la monarquía, incluyendo a Samuel, Saúl y David.",
+  "2 Samuel": "2 Samuel narra el reinado de David y sus logros como rey de Israel.",
+  "1 Reyes": "1 Reyes describe el reinado de Salomón y la división del reino en Israel y Judá.",
+  "2 Reyes": "2 Reyes continúa la historia de los reinos divididos hasta la caída de Israel y Judá.",
+  "1 Crónicas": "1 Crónicas recapitula la historia de Israel desde Adán hasta David, enfatizando la genealogía y el templo.",
+  "2 Crónicas": "2 Crónicas sigue la historia de los reyes de Judá hasta la conquista babilónica.",
+  "Esdras": "Esdras narra el regreso de los judíos del exilio y la reconstrucción del templo.",
+  "Nehemías": "Nehemías describe la reconstrucción de Jerusalén y la restauración del pueblo.",
+  "Ester": "Ester cuenta la historia de cómo la reina Ester salvó al pueblo judío del exterminio.",
+  "Job": "Job trata sobre el sufrimiento, la fe y la justicia divina.",
+  "Salmos": "Salmos es una colección de poemas y cantos de alabanza, oración y adoración a Dios.",
+  "Proverbios": "Proverbios contiene sabiduría práctica y enseñanzas morales.",
+  "Eclesiastés": "Eclesiastés reflexiona sobre el sentido de la vida y la vanidad de los esfuerzos humanos.",
+  "Cantares": "Cantares es un poema de amor que simboliza la relación entre Dios y su pueblo.",
+  "Isaías": "Isaías contiene profecías sobre juicio, esperanza y la venida del Mesías.",
+  "Jeremías": "Jeremías advierte sobre el juicio de Dios y llama a la obediencia.",
+  "Lamentaciones": "Lamentaciones expresa el dolor por la destrucción de Jerusalén.",
+  "Ezequiel": "Ezequiel contiene visiones y profecías sobre la restauración de Israel.",
+  "Daniel": "Daniel narra la historia de Daniel y sus visiones sobre el futuro.",
+  "Oseas": "Oseas utiliza el matrimonio de Oseas como metáfora del amor de Dios por Israel.",
+  "Joel": "Joel llama al arrepentimiento y profetiza sobre el Espíritu de Dios.",
+  "Amós": "Amós denuncia la injusticia social y llama a la fidelidad a Dios.",
+  "Abdías": "Abdías profetiza contra Edom y la soberanía de Dios.",
+  "Jonás": "Jonás narra la historia del profeta que fue enviado a Nínive.",
+  "Miqueas": "Miqueas anuncia juicio y restauración para Israel y Judá.",
+  "Nahúm": "Nahúm profetiza sobre la caída de Nínive.",
+  "Habacuc": "Habacuc cuestiona la justicia de Dios y recibe respuestas divinas.",
+  "Sofonías": "Sofonías advierte sobre el juicio y la purificación de Jerusalén.",
+  "Hageo": "Hageo exhorta a reconstruir el templo tras el exilio.",
+  "Zacarías": "Zacarías contiene visiones de restauración y esperanza para Israel.",
+  "Malaquías": "Malaquías llama a la fidelidad y anuncia la venida del mensajero del Señor."
+};
+
+const bookSelect = document.getElementById('book');
+const bookSummary = document.getElementById('bookSummary');
+
+function populateBooks(){
+  const names = Object.keys(oldTestamentBooks);
+  bookSelect.innerHTML = names.map(n => `<option value="${n}">${n}</option>`).join('');
+  if(names.length) showSummary(names[0]);
+}
+
+function showSummary(bookName){
+  bookSummary.textContent = oldTestamentBooks[bookName] || "Resumen no disponible";
+}
+
+bookSelect.addEventListener('change', e=>{
+  showSummary(e.target.value);
+});
+
+populateBooks();
+</script>
+</body>
+</html>
